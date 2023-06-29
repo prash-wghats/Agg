@@ -1,0 +1,84 @@
+[package]
+name = "agg"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+
+[build-dependencies]
+cc = "1.0"
+
+[dependencies]
+num = "0.4"
+wrapping_arithmetic = "0.1"
+freetype-sys = "0"
+
+[dependencies.x11]
+version = "2"
+optional = true
+
+[dependencies.sdl2-sys]
+version = "0.34.0"
+default-features = false
+features = ["bundled", "static-link"]
+optional = true
+
+[dependencies.windows-sys]
+version = "0.48"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Graphics_Gdi",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+	"Win32_UI_Input_KeyboardAndMouse",
+    "Win32_System_LibraryLoader",
+	"Win32_System_Performance",
+	"Win32_System_SystemServices",
+]
+optional = true
+
+[dev-dependencies]
+libc = "0.2"
+sprintf = "0"
+cfg_block = "0"
+time-clock = "0"
+
+[[example]]
+name = "gpc_test"
+required-features = ["libgpc"]
+
+[features]
+default = ["agg_bgr24"]
+
+sdl = ["sdl2-sys"]
+win32 = ["windows-sys"]
+x11 = ["dep:x11"]
+libgpc = []
+
+agg_gray8 = []
+agg_gray16 = []
+agg_bgr24 = []
+agg_rgb24 = []
+
+agg_bgra32 = []
+agg_rgba32 = []
+agg_argb32 = []
+agg_abgr32 = []
+
+agg_bgr48 = []
+agg_rgb48 = []
+
+agg_bgra64 = []
+agg_rgba64 = []
+agg_argb64 = []
+agg_abgr64 = []
+
+agg_rgb555 = []
+agg_rgb565 = []
+agg_rgbAAA = []
+agg_bgrAAA = []
+agg_rgbBBA = []
+agg_bgrABB = []
