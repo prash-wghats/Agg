@@ -173,7 +173,7 @@ impl PixelMap {
         let full_size = mem::size_of::<BITMAPINFOHEADER>() + rgb_size as usize + img_size as usize;
 
         let bmp = unsafe {
-            std::alloc::alloc(std::alloc::Layout::from_size_align(full_size, 1).unwrap())
+			libc::malloc(full_size as usize)
         } as *mut BITMAPINFO;
         let bmpr = unsafe { &mut *(bmp as *mut BITMAPINFOHEADER) };
 
@@ -461,18 +461,18 @@ impl PixelMap {
 
             bmp_size = bmf.bfSize - mem::size_of::<BITMAPFILEHEADER>() as u32;
 
-            bmi = std::alloc::alloc(
-                std::alloc::Layout::from_size_align(bmp_size as usize, 1).unwrap(),
-            ) as *mut BITMAPINFO;
+            bmi = libc::malloc(bmp_size as usize) as *mut BITMAPINFO;
 
             if let Ok(n) = fd.read(std::slice::from_raw_parts_mut(
                 bmi as *mut u8,
                 bmp_size as usize,
             )) {
                 if n != bmp_size as usize {
+					libc::free(bmi as *mut libc::c_void);
                     return false;
                 }
             } else {
+				libc::free(bmi as *mut libc::c_void);
                 return false;
             }
             self.destroy();
@@ -577,7 +577,7 @@ impl PixelMap {
         let full_size = mem::size_of::<BITMAPINFOHEADER>() as u32 + rgb_size;
 
         let mut bmp = unsafe {
-            std::alloc::alloc(std::alloc::Layout::from_size_align(full_size as usize, 1).unwrap())
+			libc::malloc(full_size as usize)
         } as *mut BITMAPINFO;
 
         unsafe {
